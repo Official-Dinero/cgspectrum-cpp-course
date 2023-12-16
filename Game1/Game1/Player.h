@@ -1,26 +1,34 @@
 #pragma once
-#include "Point.h"
+#include "PlacableActor.h"
 
-class Player
+class Key;
+
+class Player : public PlacableActor
 {
-	Point m_position;
-	bool m_hasPowerUp;
-	int m_lives;
-
 public:
 	Player();
-	~Player();
 
-	int GetXPosition() {return m_position.x; }
-	int GetYPosition() {return m_position.y; }
+	bool HasKey();
+	bool HasKey(int color);
+	Key* GetKey() { return m_pCurrentKey; }
+	bool HasFireball();
+	void PickupFireball();
+	void LoseFireball();
+	void PickupKey(Key* key);
+	void UseKey();
+	void DropKey();
 
-	void SetPosition(int x, int y);
+	void AddMoney(int money) { m_money += money; }
+	int GetMoney() { return m_money; }
 
-	bool HasPowerUp();
-	void PickupPowerUp();
-	void UsePowerUp();
-	int GetLives();
-	void TakeDamage();
+	int GetLives() { return m_lives; }
+	void DecrementLives() { m_lives--; }
 
-	void Draw();
+	virtual void Draw() override;
+
+private:
+	Key* m_pCurrentKey;
+	int m_money;
+	int m_lives;
+	bool Fireball;
 };

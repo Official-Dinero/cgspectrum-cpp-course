@@ -1,4 +1,8 @@
 #pragma once
+#include <vector>
+#include <string>
+
+class PlacableActor;
 
 class Level
 {
@@ -7,24 +11,25 @@ class Level
 	int m_width;
 
 public:
+	std::vector<PlacableActor*> m_pActors;
+
 	Level();
 	~Level();
 
-	void Draw(int x, int y);
+	//void Draw(int minY, int maxY, int minX, int maxX);
+	void Draw();
+	bool Load(std::string levelName, int* playerX, int* playerY);
+	PlacableActor* UpdateActors(int x, int y);
 
 	bool IsSpace(int x, int y);
-	bool IsPowerup(int x, int y);
-	bool IsEnemy(int x, int y);
-	bool IsGoal(int x, int y);
-
-	void PickupPowerup(int x, int y);
-	void RemoveEnemy(int x, int y);
+	bool IsWall(int x, int y);
+	bool IsFireball(int x, int y);
 
 	int GetHeight() { return m_height; }
 	int GetWidth() { return m_width; }
 
 private:
-
+	bool Convert(int* playerX, int* playerY);
 	int GetIndexFromCoordinates(int x, int y);
 
 };

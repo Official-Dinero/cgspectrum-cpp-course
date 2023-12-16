@@ -1,26 +1,47 @@
 #include <iostream>
 #include "Game.h"
+#include <windows.h>
+#include <mmsystem.h>
+#include <string>
+#include <thread>
+
+#pragma comment(lib, "winmm.lib")
 
 using namespace std;
 
+char input;
+
+
 int main()
 {
+	PlaySound(TEXT("music.wav"), NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
+
 	Game myGame;
 
-	while (!myGame.IsGameOver() && (myGame.m_player.GetLives() > 0))
+	if (myGame.Load())
 	{
-		myGame.Run();
+		while (!myGame.IsGameOver())
+		{
+			myGame.Run();
+		}
 
-	}
-
-	myGame.Draw();
-
-	if (myGame.m_player.GetLives() > 0)
-	{
-		cout << "YOU WON!!!" << endl;
-	}
-	else
-	{
-		cout << "You Lost :(" << endl;
+		if (myGame.DidUserQuit())
+		{
+			cout << "You Quit!" << endl;
+		}
+		else if (myGame.m_player.GetLives() < 0)
+		{
+			PlaySound(0, 0, 0);
+			PlaySound(TEXT("lose.wav"), NULL, SND_FILENAME | SND_ASYNC);
+			cout << "You Lost :(" << endl;
+			cin >> input;
+		}
+		else
+		{
+			PlaySound(0, 0, 0);
+			PlaySound(TEXT("win.wav"), NULL, SND_FILENAME | SND_ASYNC);
+			cout << "YOU WON!!!" << endl;
+			cin >> input;
+		}
 	}
 }

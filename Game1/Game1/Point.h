@@ -2,13 +2,12 @@
 
 struct Point
 {
-public:
 	int x;
 	int y;
 	
 	Point()
-		: x(1)
-		, y(13)
+		: x(0)
+		, y(0)
 	{
 
 	}

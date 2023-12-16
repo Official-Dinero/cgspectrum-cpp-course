@@ -1,54 +1,71 @@
-#include "Player.h"
 #include <iostream>
+
+#include "Player.h"
+#include "Key.h"
 
 using namespace std;
 
-constexpr char kPlayerSymbol = '@';
+constexpr int kStartingNumberOfLives = 3;
 
 Player::Player()
-	:m_hasPowerUp(false)
-	,m_lives(3)
+	: PlacableActor(0, 0)
+	, m_pCurrentKey(nullptr)
+	, m_money(0)
+	, m_lives(kStartingNumberOfLives)
+	, Fireball(false)
 {
 
 }
 
-Player::~Player()
+bool Player::HasKey()
 {
-
+	return m_pCurrentKey != nullptr;
 }
 
-void Player::SetPosition(int x, int y)
+bool Player::HasKey(int color)
 {
-	m_position.x = x;
-	m_position.y = y;
+	return HasKey() && m_pCurrentKey->GetColor() == color;
 }
 
-bool Player::HasPowerUp()
+void Player::PickupKey(Key* key)
 {
-	return m_hasPowerUp;
+	m_pCurrentKey = key;
 }
 
-void Player::PickupPowerUp()
+void Player::UseKey()
 {
-	m_hasPowerUp = true;
+	if (m_pCurrentKey)
+	{
+		m_pCurrentKey->Remove();
+		m_pCurrentKey = nullptr;
+	}
 }
 
-void Player::UsePowerUp()
+void Player::DropKey()
 {
-	m_hasPowerUp = false;
+	if (m_pCurrentKey)
+	{
+		m_pCurrentKey->Place(m_pPosition->x, m_pPosition->y);
+		m_pCurrentKey = nullptr;
+	}
 }
 
 void Player::Draw()
 {
-	cout << kPlayerSymbol;
+	cout << "@";
 }
 
-int Player::GetLives()
+bool Player::HasFireball()
 {
-	return m_lives;
+	return Fireball;
 }
 
-void Player::TakeDamage()
+void Player::PickupFireball()
 {
-	m_lives--;
+	Fireball = true;
+}
+
+void Player::LoseFireball()
+{
+	Fireball = false;
 }
